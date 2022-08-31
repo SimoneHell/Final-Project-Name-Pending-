@@ -22,9 +22,10 @@ class User(db.Model):
 class Meals(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), unique=True, nullable=False)
-    values = db.Column(db.String(120), unique=True, nullable=False)
+    nutrients = db.Column(db.String(120), unique=True, nullable=False)
     ingredients = db.Column(db.String(120), unique=True, nullable=False)
-    # Calculator(?)   
+    #aqui podria haber un cambio
+    
 
     def __repr__(self):
         return f'<Meals {self.name}'
@@ -33,7 +34,7 @@ class Meals(db.Model):
         return { 
             "id": self.id,
             "name": self.name
-            "values": self.values
+            "nutrients": self.values
         }
 
 class Favorites(db.Model):
