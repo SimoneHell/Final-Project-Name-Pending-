@@ -11,8 +11,33 @@ api = Blueprint('api', __name__)
 @api.route('/hello', methods=['POST', 'GET'])
 def handle_hello():
 
-    response_body = {
-        "message": "Hello! I'm a message that came from the backend, check the network tab on the google inspector and you will see the GET request"
-    }
+    
 
     return jsonify(response_body), 200
+
+@api.route('/signup', methods=['POST'])
+def create_new_user():
+    user_data = request.get_json("User")
+    user = User.signup(password=user_data["password"], email=user_data["email"])
+    db.session.add(user)
+    db.session.commit()
+
+    if user is not None:
+        print(user)
+        return jsonify({"message":"User created succesfully!"}), 201
+    else:
+        return jsonify({"message":"Something went wrong, Try again!"}), 500
+
+
+@api.route('/login', methods=['POST'])
+def user_login():
+    email = request.json.get('email', None)
+    password = request.json.get('password', None)
+    print(request.json)
+    user = User.query.filter_by(email=email, password=password).one_or_none()
+    if user is None:
+        return jsonify({"msg": "Something went wrong, please try again!"}), 401
+    
+    # token
+    access_token = create_access_token(identity=user.email)
+    return jsonify({ "token": access_token, "user_id": user.id, "email": user.email })

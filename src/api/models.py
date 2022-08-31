@@ -19,13 +19,38 @@ class User(db.Model):
             # do not serialize the password, its a security breach
         }
 
+    @classmethod
+    def signup(cls, email, password):
+        instance = cls(
+            email=email,
+            password=password
+        )
+        if isinstance(instance, cls):
+            return instance
+        else:
+            return None
+    
+    @classmethod
+    def login(cls, email, password):
+        user_data = cls.query.filter_by(
+            email=email
+        ).one_or_none()
+        if (not isinstance(user_data, cls)):
+            return user_data
+        if user_data.password == password:
+            return user_data
+        else:
+            return False
+
+
+
+
 class Meals(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String(120), unique=True, nullable=False)
     nutrients = db.Column(db.String(120), unique=True, nullable=False)
     ingredients = db.Column(db.String(120), unique=True, nullable=False)
-    
-    #aqui podria haber un cambio
+    #WE Can include here the CALCULATOR, but we have to firstly check how to implement it
     
 
     def __repr__(self):
