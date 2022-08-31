@@ -24,6 +24,7 @@ class Meals(db.Model):
     name = db.Column(db.String(120), unique=True, nullable=False)
     nutrients = db.Column(db.String(120), unique=True, nullable=False)
     ingredients = db.Column(db.String(120), unique=True, nullable=False)
+    
     #aqui podria haber un cambio
     
 
@@ -33,8 +34,8 @@ class Meals(db.Model):
     def serialize(self):
         return { 
             "id": self.id,
-            "name": self.name
-            "nutrients": self.values
+            "name": self.name,
+            "nutrients": self.nutrients
         }
 
 class Favorites(db.Model):
