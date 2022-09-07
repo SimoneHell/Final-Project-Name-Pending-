@@ -6,5 +6,6 @@
     on that page only (the ones not reused in other pages).
 */
 body {
-    background-color: #ff9100;
-}
+    background: -webkit-linear-gradient(bottom, #bd9e2d, #a6f77b);
+    background-repeat: no-repeat;
+  }
