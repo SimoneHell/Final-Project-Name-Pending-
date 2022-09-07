@@ -4,8 +4,8 @@ import "../../styles/navbar.css";
 
 export const Navbar = () => {
 	return (
-		<nav className="navbar navbar-light bg-light">
-
+		<nav  className="navbar navbar-light bg-light">
+			
 			<div className="container">
 
 				<Link to="/">
