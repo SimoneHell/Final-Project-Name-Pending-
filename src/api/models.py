@@ -6,6 +6,7 @@ db = SQLAlchemy()
 
 class User(db.Model):
     id = db.Column(db.Integer,unique=True, primary_key=True)
+    username = db.Column(db.String(120), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=False, nullable=False)
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
@@ -18,12 +19,14 @@ class User(db.Model):
         return {
             "id": self.id,
             "email": self.email,
+            "username": self.username
             # do not serialize the password, its a security breach
         }
 
     @classmethod
     def signup(cls, email, password):
         instance = cls(
+            username=username,
             email=email,
             password=password
         )
@@ -46,17 +49,12 @@ class User(db.Model):
 
 
 
-ingredients = db.Table("ingredients",
-    db.Column('ingredient_id', db.Integer, db.ForeignKey('ingredient.id'), primary_key=True),
-    db.Column('meal_id', db.Integer, db.ForeignKey('meal.id'), primary_key=True)
-)
-
-
 class Food(db.Model):
     id = db.Column(db.Integer, unique=True, primary_key=True)
-    name = db.Column(db.String(120), unique=True, nullable=False)
+    sumarize = db.Column(db.String(120), unique=False, nullable=False)
+    name = db.Column(db.String(120), unique=False, nullable=False)
     nutrients = db.Column(db.String(80), unique=False, nullable=False)
-
+    #favorites = db.relationship("Favorites")
     def __repr__(self):
         return f'<Ingredients {self.name}'
 
@@ -64,6 +62,7 @@ class Food(db.Model):
         return { 
             "id": self.id,
             "name": self.name,
+            "sumarize": self.sumarize,
             "nutrients": self.nutrients
         }
 
@@ -72,6 +71,7 @@ class Food(db.Model):
 class Meal(db.Model):
     id = db.Column(db.Integer,unique=True, primary_key=True)
     name = db.Column(db.String(120), unique=True, nullable=False)
+    sumarize = db.Column(db.String(120), unique=False, nullable=False)
     nutrients = db.Column(db.String(80), unique=False, nullable=False)
     ingredients = db.Column(db.String(80), unique=False, nullable=False)
     #favorites = db.relationship("Favorites")
@@ -83,10 +83,9 @@ class Meal(db.Model):
         return { 
             "id": self.id,
             "name": self.name,
-            "nutrients": self.ingredients
+            "nutrients": self.nutrients,
+            "ingredients": self.ingredients
         }
-
-
 
 class WeeklyPlan(db.Model):
     id = db.Column(db.Integer, unique=True, primary_key=True)
@@ -107,17 +106,19 @@ class WeeklyPlan(db.Model):
 
 class dailyPlan(db.Model):
     id = db.Column(db.Integer, unique=True, primary_key=True)
-        breakfast = db.Column(db.String(120), unique=True, nullable=False)
-        lunch = db.Column(db.String(120), unique=True, nullable=False)
-        dinner = db.Column(db.String(120), unique=True, nullable=False)
+    breakfast = db.Column(db.String(120), unique=True, nullable=False)
+    lunch = db.Column(db.String(120), unique=True, nullable=False)
+    dinner = db.Column(db.String(120), unique=True, nullable=False)
 
 class Favorites(db.Model):
    
     id = db.Column(db.Integer,unique=True ,primary_key=True)
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     meals_id = db.Column(db.Integer, db.ForeignKey('meal.id'))
+    foods_id = db.Column(db.Integer, db.ForeignKey('food.id'))
     user = db.relationship("User")
-    meals = db.relationship("Meal")
+    meal = db.relationship("Meal")
+    food = db.relationship("Food")
 
     def __repr__(self):
         return '<Favorites %r>' % self.id
@@ -127,11 +128,12 @@ class Favorites(db.Model):
         return {
             "id": self.id,
             "user_id":self.user_id,
-            "meals_id":self.meals_id
+            "meals_id":self.meals_id,
+            "foods_id":self.foods_id
         }
 
 
-#class Calculator (db.Model):                         Dont know if necessary
+#                        Dont know if necessary
    
 #   id = db.Column(db.Integer, primary_key=True)
 #def __repr__(self):
