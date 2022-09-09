@@ -10,7 +10,7 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=False, nullable=False)
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
-    #favorites = db.relationship("Favorites")
+    favorites = db.relationship("Favorites")
     
     def __repr__(self):
         return f'<User {self.email}>'
@@ -24,7 +24,7 @@ class User(db.Model):
         }
 
     @classmethod
-    def signup(cls, email, password):
+    def signup(cls, email, password, username):
         instance = cls(
             username=username,
             email=email,
@@ -54,7 +54,7 @@ class Food(db.Model):
     sumarize = db.Column(db.String(120), unique=False, nullable=False)
     name = db.Column(db.String(120), unique=False, nullable=False)
     nutrients = db.Column(db.String(80), unique=False, nullable=False)
-    #favorites = db.relationship("Favorites")
+    favorites = db.relationship("Favorites")
     def __repr__(self):
         return f'<Ingredients {self.name}'
 
@@ -74,7 +74,7 @@ class Meal(db.Model):
     sumarize = db.Column(db.String(120), unique=False, nullable=False)
     nutrients = db.Column(db.String(80), unique=False, nullable=False)
     ingredients = db.Column(db.String(80), unique=False, nullable=False)
-    #favorites = db.relationship("Favorites")
+    favorites = db.relationship("Favorites")
     
     def __repr__(self): 
         return f'<Meal {self.name}'
@@ -89,9 +89,15 @@ class Meal(db.Model):
 
 class WeeklyPlan(db.Model):
     id = db.Column(db.Integer, unique=True, primary_key=True)
-    breakfast = db.Column(db.String(120), unique=True, nullable=False)
-    lunch = db.Column(db.String(120), unique=True, nullable=False)
-    dinner = db.Column(db.String(120), unique=True, nullable=False)
+    monday = db.Column(db.String(120), unique=True, nullable=False)
+    tuesday = db.Column(db.String(120), unique=True, nullable=False)
+    wednesday = db.Column(db.String(120), unique=True, nullable=False)
+    thursday = db.Column(db.String(120), unique=True, nullable=False)
+    friday = db.Column(db.String(120), unique=True, nullable=False)
+    saturday = db.Column(db.String(120), unique=True, nullable=False)
+    sunday = db.Column(db.String(120), unique=True, nullable=False)
+    #dailyplan_id = db.Column(db.Integer, db.ForeignKey('dailyPlan.id'))
+    #dailyplan = db.relationship("dailyPlan")
 
     def __repr__(self):
         return f'<WeeklyPlan {self.id}'
@@ -99,9 +105,14 @@ class WeeklyPlan(db.Model):
     def serialize(self):
         return { 
             "id": self.id,
-            "breakfast": self.breakfast,
-            "lunch": self.lunch,
-            "dinner": self.dinner
+            "monday":self.monday,
+            "tuesday":self.tuesday,
+            "wednesday":self.wednesday,
+            "thursday":self.thursday,
+            "friday":self.friday,
+            "saturday":self.saturday,
+            "sunday":self.sunday,
+            #"dailyplan":self.dailyplan
         }
 
 class dailyPlan(db.Model):
@@ -109,6 +120,17 @@ class dailyPlan(db.Model):
     breakfast = db.Column(db.String(120), unique=True, nullable=False)
     lunch = db.Column(db.String(120), unique=True, nullable=False)
     dinner = db.Column(db.String(120), unique=True, nullable=False)
+
+    def __repr__(self):
+        return f'<dailyPlan {self.id}'
+
+    def serialize(self):
+        return { 
+            "id": self.id,
+            "breakfast" : self.breakfast,
+            "lunch" : self.lunch,
+            "dinner": self.dinner
+        }
 
 class Favorites(db.Model):
    
