@@ -18,7 +18,7 @@ main {
   padding: 20px;
 }
 .sidebar {
-  background: rgb(255, 255, 255);
+  background: #F9B551;
   color: rgb(0, 0, 0);
   height: 100vh;
   width: 200px;
@@ -27,24 +27,24 @@ main {
 .top_section {
   display: flex;
   flex-direction: column;
-
   align-items: left;
-  padding: 20px 15px;
 }
-.logo {
+.appname {
   font-size: 30px;
+  display: flex;
+  padding: 5px 5px;
 }
 .bars {
   display: flex;
   font-size: 25px;
-  margin-left: 50px;
+  padding: 20px 15px;
 }
 .link {
   display: flex;
   color: rgb(0, 0, 0);
   padding: 10px 15px;
-  align-items: center;
-  gap: 15px;
+  align-items: left;
+  gap: 25px;
   transition: all 0.5s;
 }
 .link:hover {
@@ -53,10 +53,23 @@ main {
   transition: all 0.5s;
 }
 .active {
-  background: lightskyblue;
-  color: #000;
+  background: #f9e051;
+  color: #ffffff;
 }
 .icon,
 .link_text {
   font-size: 20px;
+}
+.logo {
+  display: flex;
+  height: 50px;
+  width: 50px;
+  padding: 10px 10px;
+
+}
+.pages {
+  background: #FEF8BE;
+}
+.logo_name {
+  display: flex;
 }

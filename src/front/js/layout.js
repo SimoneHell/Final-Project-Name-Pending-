@@ -7,6 +7,7 @@ import RecipeSearch from "./pages/recipesearch.jsx";
 import Favorites from "./pages/favorites.jsx";
 import Sidebar from "./component/sidebar.jsx"; 
 import Account from "./pages/account.jsx"; // this wasn't here
+import Logout from "./pages/logout.jsx";
 
 //create your first component
 const Layout = () => {
@@ -24,6 +25,7 @@ const Layout = () => {
             <Route path="/account" element={<Account />} />
             <Route path="/recipesearch" element={<RecipeSearch />} />
             <Route path="/favorites" element={<Favorites />} />
+            <Route path="/logout" element={<Logout />} />
           </Routes>
         </Sidebar>
       </BrowserRouter>
