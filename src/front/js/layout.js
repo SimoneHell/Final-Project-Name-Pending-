@@ -7,8 +7,8 @@ import RecipeSearch from "./pages/recipesearch.jsx";
 import Favorites from "./pages/favorites.jsx";
 import Sidebar from "./component/sidebar.jsx";
 import Account from "./pages/account.jsx"; // this wasn't here
-import Logout from "./pages/logout.jsx";
 import { Login } from "./pages/login";
+import { Logout } from "./component/logout";
 import { SignUp } from "./pages/signup";
 import { ForgotPassword } from "./pages/forgot";
 import ScrollToTop from "./component/scrollToTop";

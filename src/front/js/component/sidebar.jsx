@@ -9,6 +9,7 @@ import {
 } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 import Logo from "../../img/rigo-baby.jpg";
+import { Logout } from "./logout";
 
 const Sidebar = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);

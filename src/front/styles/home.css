@@ -12,11 +12,19 @@
 }
 .container {
   display: flex;
+  float:left;
+  padding:0
 }
 main {
   width: 100%;
   padding: 20px;
 }
+
+body {
+  background: -webkit-linear-gradient(bottom, #bd9e2d, #a6f77b);
+  background-repeat: no-repeat;
+}
+
 .sidebar {
   background: #f9b551;
   color: rgb(0, 0, 0);
@@ -73,7 +81,3 @@ main {
   display: flex;
 }
 
-body {
-  background: -webkit-linear-gradient(bottom, #bd9e2d, #a6f77b);
-  background-repeat: no-repeat;
-}
