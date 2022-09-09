@@ -5,9 +5,13 @@ import injectContext from "./store/appContext";
 import Dashboard from "./pages/dashboard.jsx";
 import RecipeSearch from "./pages/recipesearch.jsx";
 import Favorites from "./pages/favorites.jsx";
-import Sidebar from "./component/sidebar.jsx"; 
+import Sidebar from "./component/sidebar.jsx";
 import Account from "./pages/account.jsx"; // this wasn't here
 import Logout from "./pages/logout.jsx";
+import { Login } from "./pages/login";
+import { SignUp } from "./pages/signup";
+import { ForgotPassword } from "./pages/forgot";
+import ScrollToTop from "./component/scrollToTop";
 
 //create your first component
 const Layout = () => {
@@ -18,16 +22,21 @@ const Layout = () => {
   return (
     <div>
       <BrowserRouter basename={basename}>
-        <Sidebar>
-          <Routes>
-            <Route path="/" element={<Dashboard />} />
-            <Route path="/dashboard" element={<Dashboard />} />
-            <Route path="/account" element={<Account />} />
-            <Route path="/recipesearch" element={<RecipeSearch />} />
-            <Route path="/favorites" element={<Favorites />} />
-            <Route path="/logout" element={<Logout />} />
-          </Routes>
-        </Sidebar>
+        <ScrollToTop>
+          <Sidebar>
+            <Routes>
+              <Route element={<Login />} path="/login" />
+              <Route path="/" element={<Dashboard />} />
+              <Route path="/account" element={<Account />} />
+              <Route path="/recipesearch" element={<RecipeSearch />} />
+              <Route path="/favorites" element={<Favorites />} />
+              <Route path="/logout" element={<Logout />} />
+              <Route element={<SignUp />} path="/signup" />
+              <Route element={<ForgotPassword />} path="/forgotpassword" />
+              <Route element={<h1>Not found!</h1>} />
+            </Routes>
+          </Sidebar>
+        </ScrollToTop>
       </BrowserRouter>
     </div>
   );
