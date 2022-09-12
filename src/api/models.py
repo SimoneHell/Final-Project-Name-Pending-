@@ -1,6 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 
-db = SQLAlchemy()
+db = SQLAlchemy() 
 
 # Relationships --> https://flask-sqlalchemy.palletsprojects.com/en/2.x/models/#one-to-many-relationships
 

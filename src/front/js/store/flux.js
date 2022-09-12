@@ -1,24 +1,27 @@
+const API_URL = "http://192.168.22.125:3001/api/"
+
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
-			message: null,
-			demo: [
-				{
-					title: "FIRST",
-					background: "white",
-					initial: "white"
-				},
-				{
-					title: "SECOND",
-					background: "white",
-					initial: "white"
-				}
-			]
+			users: []
+			
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
 			exampleFunction: () => {
 				getActions().changeColor(0, "green");
+			},
+			loadUsers: (users) => {
+				const store = getStore();
+
+				fetch(`${API_URL}users`)
+					.then(data => data.json())
+					.then(async (data) => {
+						let newArray = store.users
+						
+						newArray = newArray.concat(data);
+						setStore({ users: newArray });
+					})
 			},
 			
 			getMessage: async () => {
@@ -46,6 +49,10 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				//reset the global store
 				setStore({ demo: demo });
+			},
+			loadSomeData: () => {
+				getActions().loadUsers()
+				
 			}
 		}
 	};
