@@ -89,4 +89,10 @@ def get_food_by_id(id):
 
 # ----------------  FAVORITES -------------
 
+@api.route('/user', methods=['GET'])
+def getUser():
+    user = User.query.all()
+    response_body_user = list(map(lambda s: s.serialize(), user))
+    return jsonify(response_body_user), 200    
+
 
