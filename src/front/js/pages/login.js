@@ -3,8 +3,6 @@ import { Context } from "../store/appContext";
 import { Link } from "react-router-dom";
 import "../../styles/login.css";
 
-
-
 export const Login = () => {
   const { store, actions } = useContext(Context);
 
@@ -28,11 +26,9 @@ export const Login = () => {
     };
 
     const promiseResponse = await fetch(
-      "https://3001-nealxero-finalprojectna-w4rqtnneran.ws-eu63.gitpod.io/api/login",
+      "https://3002-nealxero-finalprojectna-fxjpcu5gpuq.ws-eu64.gitpod.io/api/login",
       loginOptions,
-      {
-       
-      }
+      {}
     )
       .then((resp) => resp.json())
       .then((res) => {
@@ -44,34 +40,52 @@ export const Login = () => {
     localStorage.setItem("jwt-token", promiseResponse.token);
   };
 
-  return ( <div id="container">
-    <div id="image">
-      <img id="imgStyle"src="https://us.123rf.com/450wm/butenkow/butenkow1611/butenkow161100362/67310324-plantilla-de-dise%C3%B1o-de-logotipo-para-la-dieta-ilustraci%C3%B3n-de-vector-de-icono.jpg?ver=6"/>
-    </div>
-    <div id="card" >
-    <div id="card-content">
-      <div id="card-title">
-        <h2>LOGIN</h2>
-        <div className="underline-title"></div>
+  return (
+    <div id="container">
+      <div id="image">
+        <img
+          id="imgStyle"
+          src="https://us.123rf.com/450wm/butenkow/butenkow1611/butenkow161100362/67310324-plantilla-de-dise%C3%B1o-de-logotipo-para-la-dieta-ilustraci%C3%B3n-de-vector-de-icono.jpg?ver=6"
+        />
       </div>
-      <form method="post" className="form">
-        <label htmlFor="user-email" >
-            Email
-          </label>
-        <input id="user-email" className="form-content" type="email" name="email" autoComplete="on" required />
-        <div className="form-border"></div>
-        <label htmlFor="user-password" >Password
-          </label>
-        <input id="user-password" className="form-content" type="password" name="password" required />
-        <div className="form-border"></div>
-        <Link to="">
-          <legend id="forgot-pass"><Link to="/forgotpassword">Forgot password?</Link></legend>
-        </Link>
-        <input id="submit-btn" type="submit" name="submit" value="LOGIN" />
-        <p  id="signup">Don't have account yet? <Link to="/signup">Sign Up for Free</Link></p>
-      </form>
+      <div id="card">
+        <div id="card-content">
+          <div id="card-title">
+            <h2>LOGIN</h2>
+            <div className="underline-title"></div>
+          </div>
+          <form method="post" className="form">
+            <label htmlFor="user-email">Email</label>
+            <input
+              id="user-email"
+              className="form-content"
+              type="email"
+              name="email"
+              autoComplete="on"
+              required
+            />
+            <div className="form-border"></div>
+            <label htmlFor="user-password">Password</label>
+            <input
+              id="user-password"
+              className="form-content"
+              type="password"
+              name="password"
+              required
+            />
+            <div className="form-border"></div>
+            <Link to="">
+              <legend id="forgot-pass">
+                <Link to="/forgotpassword">Forgot password?</Link>
+              </legend>
+            </Link>
+            <input onClick={(e) => logClick(e)} id="submit-btn" type="submit" name="submit" value="LOGIN" />
+            <p id="signup">
+              Don't have account yet? <Link to="/signup">Sign Up for Free</Link>
+            </p>
+          </form>
+        </div>
+      </div>
     </div>
-  </div>
-  </div>
-);
+  );
 };

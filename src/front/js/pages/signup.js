@@ -7,7 +7,7 @@ import { Link } from "react-router-dom";
 
 
 export const SignUp = () => {
-  const [name, setName] = useState("");
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const { store, actions } = useContext(Context);
@@ -17,10 +17,10 @@ export const SignUp = () => {
   const CreateUser = async (e) => {
     e.preventDefault();
     const response = await fetch(
-      "https://3002-nealxero-authentication-cf8499sax29.ws-eu63.gitpod.io/api/signup",
+      "https://3002-nealxero-finalprojectna-fxjpcu5gpuq.ws-eu64.gitpod.io/api/signup",
       {
         method: "POST",
-        body: JSON.stringify({ email, password }),
+        body: JSON.stringify({ username, email, password}),
         headers: {
           "Content-Type": "application/json",
         },

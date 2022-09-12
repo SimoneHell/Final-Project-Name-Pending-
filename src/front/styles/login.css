@@ -1,8 +1,6 @@
-a {
-    text-decoration: none;
-  }
+
   body {
-    background: -webkit-linear-gradient(bottom, #ffc800, #F9B551);
+    background: -webkit-linear-gradient(bottom, #ffd900, #ff9900);
     background-repeat: no-repeat;
   }
   label {
@@ -11,6 +9,7 @@ a {
   }
 #container {
   margin:15px;
+  
 }
 #image {
   float:left;
@@ -80,7 +79,7 @@ a {
     flex-direction: column;
   }
   .form-border {
-    background: -webkit-linear-gradient(right, #e4aa22, #c57b19);
+    background: -webkit-linear-gradient(right, #e4aa22, #ff9100);
     height: 1px;
     width: 100%;
   }
