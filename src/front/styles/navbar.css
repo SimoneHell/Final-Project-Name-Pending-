@@ -6,7 +6,8 @@
   .container {
     display: flex;
     position: relative;
-    left: -120px;
+    padding: 0;
+    float: left;
   }
   main {
     width: 100%;

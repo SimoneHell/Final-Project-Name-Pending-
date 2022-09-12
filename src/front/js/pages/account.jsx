@@ -13,8 +13,7 @@ const Account = ()=>{
         
         <Button variant="primary" onClick={() =>{setOpenAddModal(true);}}>Click me</Button>{' '}
         {openAddModal && <AddModal/>}
-
-     
+        
         </div>
     );
 };
