@@ -1,9 +1,9 @@
 import React, {useState} from "react";
 import Button from 'react-bootstrap/Button';
-import LogoutModal from '../component/logout-modal.jsx';
+import AddModal from '../component/add-modal.jsx';
 
 const Account = ()=>{
-    const [openLogoutModal, setOpenLogoutModal] = useState(false);
+    const [openAddModal, setOpenAddModal] = useState(false);
 
     return (
         <div>
@@ -11,8 +11,8 @@ const Account = ()=>{
             <h2>Account</h2>
         </div>
         
-        <Button variant="primary" onClick={() =>{setOpenLogoutModal(true);}}>Click me</Button>{' '}
-        {openLogoutModal && <LogoutModal/>}
+        <Button variant="primary" onClick={() =>{setOpenAddModal(true);}}>Click me</Button>{' '}
+        {openAddModal && <AddModal/>}
 
      
         </div>
