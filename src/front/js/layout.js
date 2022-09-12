@@ -11,7 +11,6 @@ import Account from "./pages/account.jsx"; // this wasn't here
 import Logout from "./pages/logout.jsx";
 import ScrollToTop from "./component/scrollToTop";
 import { Login } from "./pages/login";
-import { Logout } from "./component/logout";
 import { SignUp } from "./pages/signup";
 import { ForgotPassword } from "./pages/forgot";
 
