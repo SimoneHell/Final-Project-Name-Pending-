@@ -10,6 +10,11 @@ import Sidebar from "./component/sidebar.jsx";
 import Account from "./pages/account.jsx"; // this wasn't here
 import Logout from "./pages/logout.jsx";
 import ScrollToTop from "./component/scrollToTop";
+import { Login } from "./pages/login";
+import { SignUp } from "./pages/signup";
+import { ForgotPassword } from "./pages/forgot";
+
+
 
 //create your first component
 const Layout = () => {
@@ -28,6 +33,10 @@ const Layout = () => {
               <Route path="/recipesearch" element={<RecipeSearch />} />
               <Route path="/favorites" element={<Favorites />} />
               <Route path="/logout" element={<Logout />} />
+              <Route element={<Login />} path="/login" />
+              <Route element={<SignUp />} path="/signup" />
+              <Route element={<ForgotPassword />} path="/forgotpassword" />
+              <Route element={<h1>Not found!</h1>} />
             </Routes>
           </Sidebar>
         </ScrollToTop>
