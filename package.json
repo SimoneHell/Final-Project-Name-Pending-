@@ -73,10 +73,15 @@
 		]
 	},
 	"dependencies": {
+		"bootstrap": "^5.2.1",
 		"prop-types": "^15.6.1",
 		"react": "^16.8.4",
+		"react-bootstrap": "^2.5.0",
+		"react-bootstrap-buttons": "^1.0.0",
 		"react-dom": "^16.8.4",
+		"react-form": "^4.0.1",
 		"react-icons": "^4.4.0",
+		"react-modal": "^3.15.1",
 		"react-polyfills": "0.0.1",
 		"react-router-dom": "^6.3.0"
 	}
