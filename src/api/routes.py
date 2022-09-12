@@ -5,15 +5,44 @@ from flask import Flask, request, jsonify, url_for, Blueprint
 from api.models import db, User
 from api.utils import generate_sitemap, APIException
 
+
 api = Blueprint('api', __name__)
 
 
 @api.route('/hello', methods=['POST', 'GET'])
 def handle_hello():
-
-    
-
+    response_body = "Hello, world!"
     return jsonify(response_body), 200
+
+
+@api.route('/users', methods=['GET'])
+def show_users():
+    users = User.query.all()
+    all_users_ll = []
+    for user in users:
+        all_users_ll.append({
+            'id':user.id,
+            'username':user.username,
+            'email':user.email,
+            'is_active':user.is_active,
+            })
+    return jsonify(all_users_ll), 200
+
+@api.route('/users/<user_id>', methods=['GET'])
+def get_user(user_id):
+    user = User.query.filter_by(id=user_id).one_or_none()
+    try:
+        user_final = ({
+            'id':user.id,
+            'username':user.username,
+            'email':user.email,
+            'is_active':user.is_active,
+            })
+        return jsonify(user_final), 200
+    except Exception as error:
+        return jsonify("Este usuario no existe")
+        
+   
 
 @api.route('/signup', methods=['POST'])
 def create_new_user():
