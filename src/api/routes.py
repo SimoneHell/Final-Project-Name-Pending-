@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Meal
+from api.models import db, User, Meal, Food
 from api.utils import generate_sitemap, APIException
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
@@ -19,7 +19,7 @@ def handle_hello():
     return jsonify(response_body), 200
 
 
-@api.route('/users', methods=['GET'])
+@api.route('/user', methods=['GET'])
 def show_users():
     users = User.query.all()
     all_users_ll = []
@@ -28,11 +28,11 @@ def show_users():
             'id':user.id,
             'username':user.username,
             'email':user.email,
-            'is_active':user.is_active,
+            
             })
     return jsonify(all_users_ll), 200
 
-@api.route('/users/<user_id>', methods=['GET'])
+@api.route('/user/<user_id>', methods=['GET'])
 def get_user(user_id):
     user = User.query.filter_by(id=user_id).one_or_none()
     try:
@@ -40,7 +40,7 @@ def get_user(user_id):
             'id':user.id,
             'username':user.username,
             'email':user.email,
-            'is_active':user.is_active,
+            
             })
         return jsonify(user_final), 200
     except Exception as error:
@@ -50,8 +50,10 @@ def get_user(user_id):
 
 @api.route('/signup', methods=['POST'])
 def create_new_user():
-    user_data = request.get_json("User")
-    user = User.signup(password=user_data["password"], email=user_data["email"], username=user_data["username"])
+    user_email = request.json.get('user-email', None)
+    user_password = request.json.get('user-password', None)
+    user_username = request.json.get('user-name', None)
+    user = User.signup(password=user_password, email=user_email, username=user_username)
     db.session.add(user)
     db.session.commit()
 
@@ -64,8 +66,8 @@ def create_new_user():
 
 @api.route('/login', methods=['POST'])
 def user_login():
-    email = request.json.get('email', None)
-    password = request.json.get('password', None)
+    email = request.json.get('user-email', None)
+    password = request.json.get('user-password', None)
     print(request.json)
     user = User.query.filter_by(email=email, password=password).one_or_none()
     if user is None:
@@ -148,7 +150,7 @@ def foods_fav():
 
     # -------- Delete Favorite Meal and Food --------- 
 
-
+    
 @api.route('/user/favorites/meal/<int:meal_id>', methods=['DELETE'])
 def deletePlanetsFav(meal_id):
     delete_fav_meal = Favorites.query.get("meal")
@@ -165,6 +167,4 @@ def deleteFoodFav (food_id ):
         raise APIException('User was not found', status_code=404)
     db.session.delete(delete_fav_food)
     db.session.commit()
-    return jsonify("Succesfully Deleted"), 200
-
-
+    return jsonify("Succesfully Deleted"), 200 
