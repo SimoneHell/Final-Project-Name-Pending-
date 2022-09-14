@@ -14,7 +14,7 @@ export const SignUp = () => {
   const CreateUser = async (e) => {
     e.preventDefault();
     const response = await fetch(
-      "https://3002-nealxero-finalprojectna-fxjpcu5gpuq.ws-eu64.gitpod.io/api/signup",
+      "https://3001-nealxero-finalprojectna-fxjpcu5gpuq.ws-eu64.gitpod.io/signup",
       {
         method: "POST",
         body: JSON.stringify({ username, email, password }),
@@ -53,6 +53,8 @@ export const SignUp = () => {
               type="text"
               name="username"
               autoComplete="off"
+              value={username}
+              onChange={(e) => setUsername(e.target.value)}
               required
             />
             <div className="form-border"></div>
@@ -63,6 +65,8 @@ export const SignUp = () => {
               type="email"
               name="email"
               autoComplete="on"
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
               required
             />
             <div className="form-border"></div>
@@ -72,6 +76,8 @@ export const SignUp = () => {
               className="form-content"
               type="password"
               name="password"
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
               required
             />
             <div className="form-border"></div>
@@ -81,6 +87,7 @@ export const SignUp = () => {
               type="submit"
               name="submit"
               value="SIGN UP"
+              onClick={CreateUser}
             />
             <p id="signup">
               <Link to="/login">Already have an account?</Link>

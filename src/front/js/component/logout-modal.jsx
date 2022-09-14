@@ -2,6 +2,8 @@ import React, { useState } from 'react';
 import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 
+
+
 function LogoutModal() {
   const [show, setShow] = useState(false);
 
@@ -23,7 +25,7 @@ function LogoutModal() {
           <Button variant="secondary" onClick={handleClose}>
             Stay
           </Button>
-          <Button variant="danger" onClick={handleClose}>
+          <Button variant="danger" onClick={Logout} >
             Yes
           </Button>
         </Modal.Footer>

@@ -19,7 +19,7 @@ def handle_hello():
     return jsonify(response_body), 200
 
 
-@api.route('/users', methods=['GET'])
+@api.route('/user', methods=['GET'])
 def show_users():
     users = User.query.all()
     all_users_ll = []
@@ -32,7 +32,7 @@ def show_users():
             })
     return jsonify(all_users_ll), 200
 
-@api.route('/users/<user_id>', methods=['GET'])
+@api.route('/user/<user_id>', methods=['GET'])
 def get_user(user_id):
     user = User.query.filter_by(id=user_id).one_or_none()
     try:
@@ -50,8 +50,10 @@ def get_user(user_id):
 
 @api.route('/signup', methods=['POST'])
 def create_new_user():
-    user_data = request.get_json("User")
-    user = User.signup(password=user_data["password"], email=user_data["email"], username=user_data["username"])
+    user_email = request.json.get('user-email', None)
+    user_password = request.json.get('user-password', None)
+    user_username = request.json.get('user-name', None)
+    user = User.signup(password=user_password, email=user_email, username=user_username)
     db.session.add(user)
     db.session.commit()
 
@@ -118,10 +120,52 @@ def get_food_by_id(id):
 
 # ----------------  FAVORITES -------------
 
-@api.route('/user', methods=['GET'])
-def getUser():
-    user = User.query.all()
-    response_body_user = list(map(lambda s: s.serialize(), user))
-    return jsonify(response_body_user), 200    
+@api.route('/user/favorites', methods=['GET'])
+def getUserFavorites():
+    favorites = Favorites.query.all()
+    response_body = list(map(lambda s: s.serialize(), favorites))
+    return jsonify(response_body)
 
+    # ---- Add Favorite Meal and Food -----
+
+@api.route('/user/favorites/meal/<int:meal_id>', methods=['POST'])
+def meals_fav():
+    meals_fav = Favorites()
+    meals_fav.user_id = request.json.get("user_id", None)
+    meals_fav.meal_id = request.json.get("meal_id", None)
+    db.session.add(meal_fav)
+    db.session.commit()
+    return jsonify["msg":"Everything went Ok"], 200
+
+
+@api.route('/user/favorites/food/<int:food_id>', methods=['POST'])
+def foods_fav():
+    foods_fav = Favorites()
+    foods_fav.user_id = request.json.get("user_id", None)
+    foods_fav.food_id = request.json.get("food_id", None)
+    db.session.add(food_fav)
+    db.session.commit()
+    return jsonify["msg":"Everything went Ok"], 200
+
+
+    # -------- Delete Favorite Meal and Food --------- 
+
+    
+@api.route('/user/favorites/meal/<int:meal_id>', methods=['DELETE'])
+def deletePlanetsFav(meal_id):
+    delete_fav_meal = Favorites.query.get("meal")
+    if delete_fav_meal is None: 
+        raise APIException('User was not found', status_code=404)
+    db.session.delete(delete_fav_meal)
+    db.session.commit()
+    return jsonify("Succesfully Deleted"), 200 
+
+@api.route('/user/favorites/food/<int:food_id>', methods=['DELETE'])
+def deleteFoodFav (food_id ):
+    delete_fav_food = Favorites.query.get("food")
+    if delete_fav_food is None: 
+        raise APIException('User was not found', status_code=404)
+    db.session.delete(delete_fav_food)
+    db.session.commit()
+    return jsonify("Succesfully Deleted"), 200 
 

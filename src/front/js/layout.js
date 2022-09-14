@@ -26,7 +26,7 @@ const Layout = () => {
         <ScrollToTop>
           <Sidebar>
             <Routes>
-              <Route path="/" element={<Dashboard />} />
+              <Route path="/" element={<SignUp/>} />
               <Route path="/account" element={<Account />} />
               <Route path="/recipesearch" element={<RecipeSearch />} />
               <Route path="/favorites" element={<Favorites />} />

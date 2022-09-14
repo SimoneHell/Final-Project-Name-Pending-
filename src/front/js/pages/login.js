@@ -26,7 +26,7 @@ export const Login = () => {
     };
 
     const promiseResponse = await fetch(
-      "https://3002-nealxero-finalprojectna-fxjpcu5gpuq.ws-eu64.gitpod.io/api/login",
+      "https://3001-nealxero-finalprojectna-fxjpcu5gpuq.ws-eu64.gitpod.io/login",
       loginOptions,
       {}
     )
@@ -63,7 +63,9 @@ export const Login = () => {
               name="email"
               autoComplete="on"
               required
-            />
+              value={email}
+              onChange={(e) => setEmail(e.target.value)}
+            ></input>
             <div className="form-border"></div>
             <label htmlFor="user-password">Password</label>
             <input
@@ -72,7 +74,9 @@ export const Login = () => {
               type="password"
               name="password"
               required
-            />
+              value={password}
+              onChange={(e) => setPassword(e.target.value)}
+            ></input>
             <div className="form-border"></div>
             <Link to="">
               <legend id="forgot-pass">
@@ -85,7 +89,7 @@ export const Login = () => {
               type="submit"
               name="submit"
               value="LOGIN"
-            />
+            ></input>
             <p id="signup">
               Don't have account yet? <Link to="/signup">Sign Up for Free</Link>
             </p>

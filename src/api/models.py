@@ -6,11 +6,11 @@ db = SQLAlchemy()
 
 class User(db.Model):
     id = db.Column(db.Integer,unique=True, primary_key=True)
-    username = db.Column(db.String(120), unique=True, nullable=False)
+    username = db.Column(db.String(120), unique=False, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=False, nullable=False)
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
-    favorites = db.relationship("Favorites")
+    #favorites = db.relationship("Favorites")
     
     def __repr__(self):
         return f'<User {self.email}>'
@@ -54,7 +54,7 @@ class Food(db.Model):
     sumarize = db.Column(db.String(120), unique=False, nullable=False)
     name = db.Column(db.String(120), unique=False, nullable=False)
     nutrients = db.Column(db.String(80), unique=False, nullable=False)
-    favorites = db.relationship("Favorites")
+    #favorites = db.relationship("Favorites")
     def __repr__(self):
         return f'<Ingredients {self.name}'
 
@@ -74,7 +74,7 @@ class Meal(db.Model):
     sumarize = db.Column(db.String(120), unique=False, nullable=False)
     nutrients = db.Column(db.String(80), unique=False, nullable=False)
     ingredients = db.Column(db.String(80), unique=False, nullable=False)
-    favorites = db.relationship("Favorites")
+    #favorites = db.relationship("Favorites")
     
     def __repr__(self): 
         return f'<Meal {self.name}'
