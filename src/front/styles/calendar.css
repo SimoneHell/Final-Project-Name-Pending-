@@ -1,0 +1,24 @@
+[class^="col"] {
+    background: white;
+    max-width: 185px;
+    height: 650px;
+    margin: 10px;
+  }
+
+.dayHeader {
+    background-color: brown;
+    width: 185px;
+    height: 75px;
+    text-align: center;
+}
+
+.meal {
+    background-color: #9affff;
+    width: 170px;
+    height: 125px;
+    text-align: center;
+    margin-top: 25px;
+    margin-left: 7.5px;
+}
+
+
