@@ -2,7 +2,7 @@
 This module takes care of starting the API Server, Loading the DB and Adding the endpoints
 """
 from flask import Flask, request, jsonify, url_for, Blueprint
-from api.models import db, User, Meal, Food
+from api.models import db, User, Meal
 from api.utils import generate_sitemap, APIException
 from flask_jwt_extended import create_access_token
 from flask_jwt_extended import get_jwt_identity
@@ -118,10 +118,53 @@ def get_food_by_id(id):
 
 # ----------------  FAVORITES -------------
 
-@api.route('/user', methods=['GET'])
-def getUser():
-    user = User.query.all()
-    response_body_user = list(map(lambda s: s.serialize(), user))
-    return jsonify(response_body_user), 200    
+@api.route('/user/favorites', methods=['GET'])
+def getUserFavorites():
+    favorites = Favorites.query.all()
+    response_body = list(map(lambda s: s.serialize(), favorites))
+    return jsonify(response_body)
+
+    # ---- Add Favorite Meal and Food -----
+
+@api.route('/user/favorites/meal/<int:meal_id>', methods=['POST'])
+def meals_fav():
+    meals_fav = Favorites()
+    meals_fav.user_id = request.json.get("user_id", None)
+    meals_fav.meal_id = request.json.get("meal_id", None)
+    db.session.add(meal_fav)
+    db.session.commit()
+    return jsonify["msg":"Everything went Ok"], 200
+
+
+@api.route('/user/favorites/food/<int:food_id>', methods=['POST'])
+def foods_fav():
+    foods_fav = Favorites()
+    foods_fav.user_id = request.json.get("user_id", None)
+    foods_fav.food_id = request.json.get("food_id", None)
+    db.session.add(food_fav)
+    db.session.commit()
+    return jsonify["msg":"Everything went Ok"], 200
+
+
+    # -------- Delete Favorite Meal and Food --------- 
+
+
+@api.route('/user/favorites/meal/<int:meal_id>', methods=['DELETE'])
+def deletePlanetsFav(meal_id):
+    delete_fav_meal = Favorites.query.get("meal")
+    if delete_fav_meal is None: 
+        raise APIException('User was not found', status_code=404)
+    db.session.delete(delete_fav_meal)
+    db.session.commit()
+    return jsonify("Succesfully Deleted"), 200 
+
+@api.route('/user/favorites/food/<int:food_id>', methods=['DELETE'])
+def deleteFoodFav (food_id ):
+    delete_fav_food = Favorites.query.get("food")
+    if delete_fav_food is None: 
+        raise APIException('User was not found', status_code=404)
+    db.session.delete(delete_fav_food)
+    db.session.commit()
+    return jsonify("Succesfully Deleted"), 200
 
 

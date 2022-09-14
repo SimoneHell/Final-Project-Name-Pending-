@@ -1,8 +1,11 @@
 from flask_sqlalchemy import SQLAlchemy
-
+from sqlalchemy import event
+from sqlalchemy.exc import IntegrityError
 db = SQLAlchemy() 
 
 # Relationships --> https://flask-sqlalchemy.palletsprojects.com/en/2.x/models/#one-to-many-relationships
+
+MAX_DAILY_PLANS = 7
 
 class User(db.Model):
     id = db.Column(db.Integer,unique=True, primary_key=True)
@@ -10,7 +13,11 @@ class User(db.Model):
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=False, nullable=False)
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
-    favorites = db.relationship("Favorites")
+
+    #Relationships
+    daily_plans = db.relationship('DailyPlan', backref='User')
+    Favorites = db.relationship('Meal', backref='User')  
+    
     
     def __repr__(self):
         return f'<User {self.email}>'
@@ -47,26 +54,55 @@ class User(db.Model):
         else:
             return False
 
+first_block = db.Table('first_block',
+                    db.Column('daily_plan_id', db.Integer, db.ForeignKey('daily_plan.id')),
+                    db.Column('meal_id', db.Integer, db.ForeignKey('meal.id'))
+                    )
+second_block = db.Table('second_block',
+                    db.Column('daily_plan_id', db.Integer, db.ForeignKey('daily_plan.id')),
+                    db.Column('meal_id', db.Integer, db.ForeignKey('meal.id'))
+                    )
+third_block = db.Table('third_block',
+                    db.Column('daily_plan_id', db.Integer, db.ForeignKey('daily_plan.id')),
+                    db.Column('meal_id', db.Integer, db.ForeignKey('meal.id'))
+                    )
 
 
-class Food(db.Model):
+class DailyPlan(db.Model):
     id = db.Column(db.Integer, unique=True, primary_key=True)
-    sumarize = db.Column(db.String(120), unique=False, nullable=False)
-    name = db.Column(db.String(120), unique=False, nullable=False)
-    nutrients = db.Column(db.String(80), unique=False, nullable=False)
-    favorites = db.relationship("Favorites")
+    first_block = db.relationship('Meal', secondary=first_block, backref='Breakfast') 
+    second_block = db.relationship('Meal', secondary=second_block, backref='Lunch') 
+    thirdt_block = db.relationship('Meal', secondary=third_block, backref='Dinner') 
+    
+    
+
+    #Relationships
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+     
+
     def __repr__(self):
-        return f'<Ingredients {self.name}'
+        return f'<DailyPlan {self.id}'
 
     def serialize(self):
         return { 
             "id": self.id,
-            "name": self.name,
-            "sumarize": self.sumarize,
-            "nutrients": self.nutrients
+            "breakfast" : self.breakfast,
+            "lunch" : self.lunch,
+            "dinner": self.dinner,
+            "user": self.user_id
         }
 
-        
+@event.listens_for(DailyPlan.user_id, 'set', retval=True)
+def plans_per_user_check(target, value, oldvalue, initiator):
+    if value is not None:
+        plans_count = DailyPlan.query.filter_by(user_id=value).count()
+        if plans_count >= MAX_DAILY_PLANS:
+            orig = Exception('Maximum number of Daily plans ({}) '\
+                             'reached for User.id = {}'\
+                             .format(MAX_DAILY_PLANS, value))
+            msg = "Record Not Committed"
+            raise IntegrityError(msg, ';)', orig)
+    return value
 
 class Meal(db.Model):
     id = db.Column(db.Integer,unique=True, primary_key=True)
@@ -74,6 +110,10 @@ class Meal(db.Model):
     sumarize = db.Column(db.String(120), unique=False, nullable=False)
     nutrients = db.Column(db.String(80), unique=False, nullable=False)
     ingredients = db.Column(db.String(80), unique=False, nullable=False)
+
+    #Relationships
+    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
+    daily_plan_id = db.Column(db.Integer, db.ForeignKey('daily_plan.id'))
     
     
     def __repr__(self): 
@@ -87,70 +127,7 @@ class Meal(db.Model):
             "ingredients": self.ingredients
         }
 
-class WeeklyPlan(db.Model):
-    id = db.Column(db.Integer, unique=True, primary_key=True)
-    monday = db.Column(db.String(120), unique=True, nullable=False)
-    tuesday = db.Column(db.String(120), unique=True, nullable=False)
-    wednesday = db.Column(db.String(120), unique=True, nullable=False)
-    thursday = db.Column(db.String(120), unique=True, nullable=False)
-    friday = db.Column(db.String(120), unique=True, nullable=False)
-    saturday = db.Column(db.String(120), unique=True, nullable=False)
-    sunday = db.Column(db.String(120), unique=True, nullable=False)
-    #dailyplan_id = db.Column(db.Integer, db.ForeignKey('dailyPlan.id'))
-    #dailyplan = db.relationship("dailyPlan")
 
-    def __repr__(self):
-        return f'<WeeklyPlan {self.id}'
-
-    def serialize(self):
-        return { 
-            "id": self.id,
-            "monday":self.monday,
-            "tuesday":self.tuesday,
-            "wednesday":self.wednesday,
-            "thursday":self.thursday,
-            "friday":self.friday,
-            "saturday":self.saturday,
-            "sunday":self.sunday,
-            #"dailyplan":self.dailyplan
-        }
-
-class dailyPlan(db.Model):
-    id = db.Column(db.Integer, unique=True, primary_key=True)
-    breakfast = db.Column(db.String(120), unique=True, nullable=False)
-    lunch = db.Column(db.String(120), unique=True, nullable=False)
-    dinner = db.Column(db.String(120), unique=True, nullable=False)
-
-    def __repr__(self):
-        return f'<dailyPlan {self.id}'
-
-    def serialize(self):
-        return { 
-            "id": self.id,
-            "breakfast" : self.breakfast,
-            "lunch" : self.lunch,
-            "dinner": self.dinner
-        }
-
-class Favorites(db.Model):
-   
-    id = db.Column(db.Integer,unique=True ,primary_key=True)
-    user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-    meals_id = db.Column(db.Integer, db.ForeignKey('meal.id'))
-    foods_id = db.Column(db.Integer, db.ForeignKey('food.id'))
-    
-
-    def __repr__(self):
-        return '<Favorites %r>' % self.id
-
-    def serialize(self):
-       
-        return {
-            "id": self.id,
-            "user_id":self.user_id,
-            "meals_id":self.meals_id,
-            "foods_id":self.foods_id
-        }
 
 
 #                        Dont know if necessary
