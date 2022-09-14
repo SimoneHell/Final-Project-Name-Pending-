@@ -83,7 +83,7 @@ def user_logout():
     if user is None:
         return jsonify({"msg": " Succesfully Logged out "})
     return redirect(url_for("login")) 
-
+ 
 
 #-------------------------- MEALS -----------------------
 
