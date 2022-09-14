@@ -74,7 +74,7 @@ class Meal(db.Model):
     sumarize = db.Column(db.String(120), unique=False, nullable=False)
     nutrients = db.Column(db.String(80), unique=False, nullable=False)
     ingredients = db.Column(db.String(80), unique=False, nullable=False)
-    favorites = db.relationship("Favorites")
+    
     
     def __repr__(self): 
         return f'<Meal {self.name}'
@@ -138,9 +138,7 @@ class Favorites(db.Model):
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     meals_id = db.Column(db.Integer, db.ForeignKey('meal.id'))
     foods_id = db.Column(db.Integer, db.ForeignKey('food.id'))
-    user = db.relationship("User")
-    meal = db.relationship("Meal")
-    food = db.relationship("Food")
+    
 
     def __repr__(self):
         return '<Favorites %r>' % self.id

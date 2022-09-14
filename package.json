@@ -8,7 +8,10 @@
 	"main": "index.js",
 	"scripts": {
 		"start": "webpack-dev-server --config webpack.dev.js --port 3000",
-		"build": "webpack --config webpack.prod.js"
+		"build": "webpack --config webpack.prod.js",
+		"db:start": "docker compose up nest-db -d",
+		"db:stop": "docker compose rm nest-db -s -f -v",
+		"db:reset": " rm -R -f ./migrations && pipenv run init && npm run db:stop && npm run db:start  &&  pipenv run migrate && pipenv run upgrade"
 	},
 	"author": {
 		"name": "Alejandro Sanchez",
