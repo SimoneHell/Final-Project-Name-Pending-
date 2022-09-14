@@ -1,7 +1,6 @@
 import React, { useContext, useState } from "react";
 import { Context } from "../store/appContext";
 import { Link } from "react-router-dom";
-import "../../styles/login.css";
 
 export const Login = () => {
   const { store, actions } = useContext(Context);
@@ -26,7 +25,7 @@ export const Login = () => {
     };
 
     const promiseResponse = await fetch(
-      "https://3001-nealxero-finalprojectna-w4rqtnneran.ws-eu63.gitpod.io/api/login",
+      "https://3002-nealxero-finalprojectna-fxjpcu5gpuq.ws-eu64.gitpod.io/api/login",
       loginOptions,
       {}
     )
@@ -79,7 +78,13 @@ export const Login = () => {
                 <Link to="/forgotpassword">Forgot password?</Link>
               </legend>
             </Link>
-            <input id="submit-btn" type="submit" name="submit" value="LOGIN" />
+            <input
+              onClick={(e) => logClick(e)}
+              id="submit-btn"
+              type="submit"
+              name="submit"
+              value="LOGIN"
+            />
             <p id="signup">
               Don't have account yet? <Link to="/signup">Sign Up for Free</Link>
             </p>
