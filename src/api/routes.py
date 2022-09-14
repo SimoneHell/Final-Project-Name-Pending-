@@ -28,7 +28,7 @@ def show_users():
             'id':user.id,
             'username':user.username,
             'email':user.email,
-            'is_active':user.is_active,
+            
             })
     return jsonify(all_users_ll), 200
 
@@ -40,7 +40,7 @@ def get_user(user_id):
             'id':user.id,
             'username':user.username,
             'email':user.email,
-            'is_active':user.is_active,
+            
             })
         return jsonify(user_final), 200
     except Exception as error:
@@ -66,8 +66,8 @@ def create_new_user():
 
 @api.route('/login', methods=['POST'])
 def user_login():
-    email = request.json.get('email', None)
-    password = request.json.get('password', None)
+    email = request.json.get('user-email', None)
+    password = request.json.get('user-password', None)
     print(request.json)
     user = User.query.filter_by(email=email, password=password).one_or_none()
     if user is None:

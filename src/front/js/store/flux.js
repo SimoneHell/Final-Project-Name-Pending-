@@ -1,4 +1,4 @@
-const API_URL = "https://3000-nealxero-finalprojectna-fxjpcu5gpuq.ws-eu64.gitpod.io/"
+const API_URL = "https://3001-nealxero-finalprojectna-fxjpcu5gpuq.ws-eu64.gitpod.io/"
 
 const getState = ({ getStore, getActions, setStore }) => {
 	return {

@@ -6,13 +6,11 @@ import "../../styles/login.css";
 export const Login = () => {
   const { store, actions } = useContext(Context);
 
-  // This is a hook and returns an array of [state, setState]
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
 
   const logClick = async (e) => {
-    // This is necessary if we are using a form
-    // Whit this we are overrinding the default behaviour of the form so it doesn't refresh
+   
     e.preventDefault();
     const loginOptions = {
       method: "POST",
@@ -20,24 +18,24 @@ export const Login = () => {
         "Content-type": "application/json",
       },
       body: JSON.stringify({
-        email,
-        password,
+        "user-email": email,
+        "user-password": password,
       }),
     };
 
     const promiseResponse = await fetch(
-      "https://3001-nealxero-finalprojectna-fxjpcu5gpuq.ws-eu64.gitpod.io/login",
-      loginOptions,
-      {}
+      "https://3001-nealxero-finalprojectna-fxjpcu5gpuq.ws-eu64.gitpod.io/api/login",
+      loginOptions
     )
       .then((resp) => resp.json())
       .then((res) => {
         alert("Login in successfull");
         return res;
       })
-      .catch((error) => console.error("Something went wrong", error));
+      .catch((error) => console.log("Something went wrong", error));
 
     localStorage.setItem("jwt-token", promiseResponse.token);
+    console.log(promiseResponse);
   };
 
   return (
@@ -90,9 +88,9 @@ export const Login = () => {
               name="submit"
               value="LOGIN"
             ></input>
-            <p id="signup">
+            <h4 id="signup">
               Don't have account yet? <Link to="/signup">Sign Up for Free</Link>
-            </p>
+            </h4>
           </form>
         </div>
       </div>

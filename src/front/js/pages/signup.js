@@ -14,10 +14,10 @@ export const SignUp = () => {
   const CreateUser = async (e) => {
     e.preventDefault();
     const response = await fetch(
-      "https://3001-nealxero-finalprojectna-fxjpcu5gpuq.ws-eu64.gitpod.io/signup",
+      "https://3001-nealxero-finalprojectna-fxjpcu5gpuq.ws-eu64.gitpod.io/api/signup",
       {
         method: "POST",
-        body: JSON.stringify({ username, email, password }),
+        body: JSON.stringify({ "user-name":username, "user-email":email, "user-password":password }),
         headers: {
           "Content-Type": "application/json",
         },
@@ -27,7 +27,7 @@ export const SignUp = () => {
     if (response.status == 200) {
       navigate("/login");
     } else {
-      alert(confirmation.alert);
+      navigate("/login") & alert("Succesfully Created")
     }
   };
 

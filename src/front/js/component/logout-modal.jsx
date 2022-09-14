@@ -1,14 +1,15 @@
-import React, { useState } from 'react';
-import Button from 'react-bootstrap/Button';
-import Modal from 'react-bootstrap/Modal';
-
-
+import React, { useState } from "react";
+import Button from "react-bootstrap/Button";
+import Modal from "react-bootstrap/Modal";
 
 function LogoutModal() {
   const [show, setShow] = useState(false);
 
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
+  const LogoutClick = () => {
+    localStorage.removeItem("jwt-token");
+  };
 
   return (
     <>
@@ -25,7 +26,13 @@ function LogoutModal() {
           <Button variant="secondary" onClick={handleClose}>
             Stay
           </Button>
-          <Button variant="danger" onClick={Logout} >
+          <Button
+            variant="danger"
+            onClick={function() {
+              LogoutClick();
+              handleClose();
+            }}
+          >
             Yes
           </Button>
         </Modal.Footer>
