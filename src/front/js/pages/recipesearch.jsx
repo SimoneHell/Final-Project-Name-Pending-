@@ -1,9 +1,10 @@
 import React from "react";
+import SearchBar from "../component/searchbar.jsx";
 
 const RecipeSearch = ()=>{
     return (
         <div>
-            <h2>Search</h2>
+            <SearchBar placeholder="Search..."/>
         </div>
     );
 };
