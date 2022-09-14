@@ -6,7 +6,7 @@ function SearchBar ({placeholder, data}) {
         <div className='search'>
             <div className='searchInput'>
                 <input type="text" placeholder={placeholder}/>
-                <FaSearch/>
+
             </div>
             <div className='dataResult'></div>
         </div>
