@@ -1,10 +1,10 @@
-import React, {useState} from 'react';
+import React from 'react';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import '../../styles/calendar.css';
 import Stack from 'react-bootstrap/Stack';
 
-function DailyPlan () {
+function DailyMeal () {
     return(
             <Col>
             <Stack gap={4}>
@@ -18,4 +18,4 @@ function DailyPlan () {
     )
 };
 
-export default DailyPlan;
+export default DailyMeal;
