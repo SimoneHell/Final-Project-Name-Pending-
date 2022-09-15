@@ -2,6 +2,7 @@ import React from "react";
 import { BrowserRouter, Route, Routes } from "react-router-dom";
 import "../styles/navbar.css"; // the import here was ./home.css
 import "../styles/index.css";
+import "../styles/searchbar.css";
 import injectContext from "./store/appContext";
 import Dashboard from "./pages/dashboard.jsx";
 import RecipeSearch from "./pages/recipesearch.jsx";
@@ -26,7 +27,7 @@ const Layout = () => {
         <ScrollToTop>
           <Sidebar>
             <Routes>
-              <Route path="/" element={<Dashboard />} />
+              <Route path="/" element={<SignUp/>} />
               <Route path="/account" element={<Account />} />
               <Route path="/recipesearch" element={<RecipeSearch />} />
               <Route path="/favorites" element={<Favorites />} />
