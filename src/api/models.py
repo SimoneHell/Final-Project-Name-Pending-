@@ -16,7 +16,7 @@ class User(db.Model):
 
     #Relationships
     daily_plans = db.relationship('DailyPlan', backref='User')
-    Favorites = db.relationship('Meal', backref='User')  
+    Favorites = db.relationship('Meal', backref='User', lazy='dynamic')  
     
     
     def __repr__(self):
@@ -117,7 +117,12 @@ class Meal(db.Model):
     
     
     def __repr__(self): 
-        return f'<Meal {self.name}'
+        return f"""{ 
+            "id": self.id,
+            "name": self.name,
+            "nutrients": self.nutrients,
+            "ingredients": self.ingredients
+        }"""
 
     def serialize(self):
         return { 
