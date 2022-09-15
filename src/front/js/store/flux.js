@@ -1,4 +1,4 @@
-const API_URL = "http://192.168.22.125:3001/api/"
+const API_URL = "https://3001-nealxero-finalprojectna-fxjpcu5gpuq.ws-eu64.gitpod.io/"
 
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
@@ -49,11 +49,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 
 				//reset the global store
 				setStore({ demo: demo });
-			},
-			loadSomeData: () => {
-				getActions().loadUsers()
-				
 			}
+			
 		}
 	};
 };
