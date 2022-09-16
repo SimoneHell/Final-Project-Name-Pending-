@@ -3,14 +3,13 @@ const API_URL = "https://3001-nealxero-finalprojectna-fxjpcu5gpuq.ws-eu64.gitpod
 const getState = ({ getStore, getActions, setStore }) => {
 	return {
 		store: {
-			users: []
-			
+			users: [],
+			meals: [],
+			favorites: []
 		},
 		actions: {
 			// Use getActions to call a function within a fuction
-			exampleFunction: () => {
-				getActions().changeColor(0, "green");
-			},
+			
 			loadUsers: (users) => {
 				const store = getStore();
 
@@ -22,6 +21,34 @@ const getState = ({ getStore, getActions, setStore }) => {
 						newArray = newArray.concat(data);
 						setStore({ users: newArray });
 					})
+			},
+
+			loadIndivUser: (url, id, plan) => {
+				const store = getStore();
+
+				fetch(url)
+					.then(data => data.json())
+					.then(data => {
+						let newArray = store[plan]
+						newArray[id].info = data.result
+						setStore({ [plan]: newArray });
+
+					})
+			},
+			
+			updateFavoriteList: (newElement) => {
+				const store = getStore();
+				const newFavorites = [...store.favorites, newElement];
+				setStore({ favorites: newFavorites });
+			  },
+		
+			  deleteFavorite: (data) => {
+				const store = getStore();
+		
+				let newFavorites = store.favorites.filter((item, i) => i != data);
+				setStore({ favorites: newFavorites });
+			  },
+
 			},
 			
 			getMessage: async () => {
@@ -36,23 +63,8 @@ const getState = ({ getStore, getActions, setStore }) => {
 					console.log("Error loading message from backend", error)
 				}
 			},
-			changeColor: (index, color) => {
-				//get the store
-				const store = getStore();
-
-				//we have to loop the entire demo array to look for the respective index
-				//and change its color
-				const demo = store.demo.map((elm, i) => {
-					if (i === index) elm.background = color;
-					return elm;
-				});
-
-				//reset the global store
-				setStore({ demo: demo });
-			}
-			
 		}
 	};
-};
+
 
 export default getState;
