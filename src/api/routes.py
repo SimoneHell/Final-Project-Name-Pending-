@@ -22,7 +22,7 @@ def show_users():
             'id':user.id,
             'username':user.username,
             'email':user.email,
-            
+            'url': f'api/user/{user.id}'
             })
     return jsonify(all_users_ll), 200
 
@@ -34,11 +34,13 @@ def get_user(user_id):
             'id':user.id,
             'username':user.username,
             'email':user.email,
+            'daily_plans': f'./api/user/{user.id}/daily_meals',
+            'favorites': f'./api/user/{user.id}/favorites'
             
             })
         return jsonify(user_final), 200
     except Exception as error:
-        return jsonify("Este usuario no existe")
+        return jsonify("This user doesn't exists")
 
 
         
@@ -104,7 +106,7 @@ def get_meal_by_id(meal_id):
             })
         return jsonify(meal_final), 200
     except Exception as error:
-        return jsonify("Este usuario no existe")
+        return jsonify("This meal doesn't exists")
     
 # --------------   User's Favorites --------------------------------
 @api.route('/user/<user_id>/favorites', methods=['GET'])
@@ -113,17 +115,64 @@ def get_user_favorites(user_id):
     
     try:
         user_final = ({
-            'id':user.id
-            
-            
-            
+            'id':user.id,
+            'username':user.username,
+            'favorites' : []
             })
-        
-        print(user.Favorites)
+
+        for fav in user.favorites:
+            user_final['favorites'].append({
+                'id':fav.id,
+                'name':fav.name,
+                'sumarize':fav.sumarize,
+                'nutrients':fav.nutrients,
+                'ingredients':fav.ingredients,
+            })
+
         return jsonify(user_final), 200
     except Exception as error:
+        return jsonify("This user doesn't have favorites")
+
+# --------------   User's Daily plan --------------------------------
+@api.route('/user/<user_id>/daily_meals', methods=['GET'])
+def get_user_daily_plan(user_id):
+    user = User.query.filter_by(id=user_id).one_or_none()
+    return jsonify(user.to_dict()), 200
+'''  
+    try:
+        user_final = ({
+            'id':user.id,
+            'username':user.username,
+            'daily_plans' : []
+            })
+
+        for plan in user.daily_plans:
+            meal_first= list(map(lambda s: s.serialize_daily_plan(), plan.first_block))
+            meal_second= list(map(lambda s: s.serialize_daily_plan(), plan.second_block))
+            meal_third= list(map(lambda s: s.serialize_daily_plan(), plan.third_block))
+
+            user_final['daily_plans'].append({
+                'daily_plan_id': plan.id,
+                'first_block' : { 
+                    'meals' : meal_first
+                },
+                'second_block' : { 
+                    'meals' : meal_second
+                },
+                'third_block' : { 
+                    'meals' : meal_third
+                }
+            })
+
+        return jsonify(user_final), 200
+
+    except Exception as error:
         print('no')
-        return jsonify("Este usuario no existe")
+        return jsonify("This user doesn't have daily plans")
+        '''
+
+
+
 
 
 
