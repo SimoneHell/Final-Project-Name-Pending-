@@ -24,10 +24,11 @@ const Layout = () => {
     <div>
       <BrowserRouter basename={basename}>
         <ScrollToTop>
+          <div>
           <Sidebar>
             <Routes>
               <Route path="/" element={<SignUp/>} />
-              <Route path="/account" element={<Account />} />
+              <Route path="/dashboard" element={<Dashboard/>} />
               <Route path="/recipesearch" element={<RecipeSearch />} />
               <Route path="/favorites" element={<Favorites />} />
               <Route path="/logout" element={<Logout />} />
@@ -37,6 +38,7 @@ const Layout = () => {
               <Route element={<h1>Not found!</h1>} />
             </Routes>
           </Sidebar>
+          </div>
         </ScrollToTop>
       </BrowserRouter>
     </div>

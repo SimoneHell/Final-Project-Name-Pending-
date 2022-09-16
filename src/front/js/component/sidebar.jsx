@@ -6,17 +6,18 @@ import {
   FaSearch,
   FaBars,
   FaSignOutAlt,
+  FaBorderNone,
 } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 import Logo from "../../img/rigo-baby.jpg";
-import { Logout } from "./logout";
+
 
 const Sidebar = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
   const toggle = () => setIsOpen(!isOpen);
   const menuItem = [
     {
-      path: "/",
+      path: "/dashboard",
       name: "Dashboard",
       icon: <FaTh />,
     },
@@ -38,7 +39,7 @@ const Sidebar = ({ children }) => {
     },
 
     {
-      path: "/logout",
+      path: "/Logout",
       name: "Log Out",
       icon: <FaSignOutAlt />,
     },
