@@ -28,13 +28,18 @@ const Layout = () => {
           <div>
           <Sidebar>
             <Routes>
+<<<<<<< HEAD
               <Route path="/" element={<SignUp/>} />
               <Route path="/dashboard" element={<Dashboard/>} />
+=======
+              <Route path="/" element={<Dashboard/>} />
+              <Route path="/dashboard" element={<Dashboard />} />
+              <Route path="/account" element={<Account />} />
+>>>>>>> bf30c6d8f7de60b9c5e002861670527716909d0e
               <Route path="/recipesearch" element={<RecipeSearch />} />
               <Route path="/favorites" element={<Favorites />} />
               <Route path="/logout" element={<Logout />} />
               <Route element={<Login />} path="/login" />
-              <Route element={<SignUp />} path="/signup" />
               <Route element={<ForgotPassword />} path="/forgotpassword" />
               <Route element={<h1>Not found!</h1>} />
             </Routes>
