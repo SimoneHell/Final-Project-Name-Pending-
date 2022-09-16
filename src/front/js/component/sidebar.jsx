@@ -64,7 +64,7 @@ const Sidebar = ({ children }) => {
               to={item.path}
               key={index}
               className="link"
-              activeclassname="active"
+              activeclassname="mealpicked"
             >
               <div className="icon">{item.icon}</div>
               <div
