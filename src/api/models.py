@@ -1,34 +1,34 @@
 from flask_sqlalchemy import SQLAlchemy
 from sqlalchemy import event
 from sqlalchemy.exc import IntegrityError
-db = SQLAlchemy() 
+from sqlalchemy.orm import backref
+from sqlalchemy_serializer import SerializerMixin
+
+db = SQLAlchemy()
 
 # Relationships --> https://flask-sqlalchemy.palletsprojects.com/en/2.x/models/#one-to-many-relationships
 
 MAX_DAILY_PLANS = 7
 
-class User(db.Model):
-    id = db.Column(db.Integer,unique=True, primary_key=True)
+
+class User(db.Model, SerializerMixin):
+    serialize_only = ('id', 'username', 'email', 'daily_plans.id')
+    id = db.Column(db.Integer, unique=True, primary_key=True)
     username = db.Column(db.String(120), unique=True, nullable=False)
     email = db.Column(db.String(120), unique=True, nullable=False)
     password = db.Column(db.String(80), unique=False, nullable=False)
     is_active = db.Column(db.Boolean(), unique=False, nullable=False)
 
-    #Relationships
-    daily_plans = db.relationship('DailyPlan', backref='User')
-    Favorites = db.relationship('Meal', backref='User')  
-    
-    
+    # Relationships
+    daily_plans = db.relationship(
+        'DailyPlan', backref='User')
+    favorites = db.relationship('Meal', backref=backref(
+        'User', uselist=False), lazy='dynamic')
+
     def __repr__(self):
         return f'<User {self.email}>'
 
-    def serialize(self):
-        return {
-            "id": self.id,
-            "email": self.email,
-            "username": self.username
-            # do not serialize the password, its a security breach
-        }
+    
 
     @classmethod
     def signup(cls, email, password, username):
@@ -41,7 +41,7 @@ class User(db.Model):
             return instance
         else:
             return None
-    
+
     @classmethod
     def login(cls, email, password):
         user_data = cls.query.filter_by(
@@ -54,85 +54,93 @@ class User(db.Model):
         else:
             return False
 
+
 first_block = db.Table('first_block',
-                    db.Column('daily_plan_id', db.Integer, db.ForeignKey('daily_plan.id')),
+                    db.Column('daily_plan_id', db.Integer,
+                              db.ForeignKey('daily_plan.id')),
                     db.Column('meal_id', db.Integer, db.ForeignKey('meal.id'))
+                    
                     )
 second_block = db.Table('second_block',
-                    db.Column('daily_plan_id', db.Integer, db.ForeignKey('daily_plan.id')),
+                    db.Column('daily_plan_id', db.Integer,
+                              db.ForeignKey('daily_plan.id')),
                     db.Column('meal_id', db.Integer, db.ForeignKey('meal.id'))
                     )
 third_block = db.Table('third_block',
-                    db.Column('daily_plan_id', db.Integer, db.ForeignKey('daily_plan.id')),
+                    db.Column('daily_plan_id', db.Integer,
+                              db.ForeignKey('daily_plan.id')),
                     db.Column('meal_id', db.Integer, db.ForeignKey('meal.id'))
                     )
 
+TYPES = [
+    ('monday', 'Monday'),
+    ('tuesday', 'Tuesday'),
+    ('wednesday', 'Wednesday'),
+    ('thursday', 'Thursday'),
+    ('friday', 'Friday'),
+    ('saturday', 'Saturday'),
+    ('sunday', 'Sunday'),
 
-class DailyPlan(db.Model):
+]
+
+class DailyPlan(db.Model, SerializerMixin):
+    serialize_only = ('id', 'first_block.id', 'first_block.name', 'second_block.id', 'second_block.name', 'third_block.id', 'third_block.name')
     id = db.Column(db.Integer, unique=True, primary_key=True)
-    first_block = db.relationship('Meal', secondary=first_block, backref='Breakfast') 
-    second_block = db.relationship('Meal', secondary=second_block, backref='Lunch') 
-    thirdt_block = db.relationship('Meal', secondary=third_block, backref='Dinner') 
     
-    
+    first_block = db.relationship(
+        'Meal', secondary=first_block, backref='Breakfast')
+    second_block = db.relationship(
+        'Meal', secondary=second_block, backref='Lunch')
+    third_block = db.relationship(
+        'Meal', secondary=third_block, backref='Dinner')
 
-    #Relationships
+    # Relationships
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
-     
+
+    
 
     def __repr__(self):
-        return f'<DailyPlan {self.id}'
+        return f'DailyPlan( id : "{str(self.id)}",  first_block : "{str(self.first_block)}", second_block : "{str(self.second_block)}",  third_block : "{str(self.third_block)}")'
 
-    def serialize(self):
-        return { 
-            "id": self.id,
-            "breakfast" : self.breakfast,
-            "lunch" : self.lunch,
-            "dinner": self.dinner,
-            "user": self.user_id
-        }
+    
+
 
 @event.listens_for(DailyPlan.user_id, 'set', retval=True)
 def plans_per_user_check(target, value, oldvalue, initiator):
     if value is not None:
         plans_count = DailyPlan.query.filter_by(user_id=value).count()
         if plans_count >= MAX_DAILY_PLANS:
-            orig = Exception('Maximum number of Daily plans ({}) '\
-                             'reached for User.id = {}'\
+            orig = Exception('Maximum number of Daily plans ({}) '
+                             'reached for User.id = {}'
                              .format(MAX_DAILY_PLANS, value))
             msg = "Record Not Committed"
             raise IntegrityError(msg, ';)', orig)
     return value
 
-class Meal(db.Model):
-    id = db.Column(db.Integer,unique=True, primary_key=True)
+
+class Meal(db.Model, SerializerMixin):
+    serialize_only = ('id', 'name', 'sumarize')
+    id = db.Column(db.Integer, unique=True, primary_key=True)
     name = db.Column(db.String(120), unique=True, nullable=False)
     sumarize = db.Column(db.String(120), unique=False, nullable=False)
     nutrients = db.Column(db.String(80), unique=False, nullable=False)
     ingredients = db.Column(db.String(80), unique=False, nullable=False)
-
-    #Relationships
+    # Relationships
     user_id = db.Column(db.Integer, db.ForeignKey('user.id'))
     daily_plan_id = db.Column(db.Integer, db.ForeignKey('daily_plan.id'))
-    
-    
-    def __repr__(self): 
-        return f'<Meal {self.name}'
 
-    def serialize(self):
-        return { 
-            "id": self.id,
-            "name": self.name,
-            "nutrients": self.nutrients,
-            "ingredients": self.ingredients
-        }
+    def __repr__(self):
+        return f'Meal( id : "{str(self.id)}",  name : "{str(self.name)}", sumarize : "{str(self.sumarize)}",  nutrients : "{str(self.nutrients)}",  ingredients : "{str(self.ingredients)}")'
+
+    
+        
 
 
 
 
 #                        Dont know if necessary
-   
+
 #   id = db.Column(db.Integer, primary_key=True)
-#def __repr__(self):
+# def __repr__(self):
 #       return { "id": self.id}
-#def serialize(self): return {}
+# def serialize(self): return {}
