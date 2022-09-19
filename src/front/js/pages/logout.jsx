@@ -1,22 +1,26 @@
-import React, {useState} from "react";
-import Button from 'react-bootstrap/Button';
-import LogoutModal from '../component/logout-modal.jsx';
+import React, { useState } from "react";
+import LogoutModal from "../component/logout-modal.jsx";
 
-const Logout = ()=>{
-    const [openLogoutModal, setOpenLogoutModal] = useState(false);
-
-    return (
-        <div>
-        <div className="pages">
-            <h2>Log out</h2>
-        </div>
-        
-        <Button variant="primary" onClick={() =>{setOpenLogoutModal(true);}}>Click me</Button>{' '}
-        {openLogoutModal && <LogoutModal/>}
-
-     
-        </div>
-    );
+const Logout = () => {
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
+  const LogoutClick = () => {
+    localStorage.removeItem("jwt-token");
+  };
+  return (
+    <div>
+      <div className="pages">
+        <h2>Log out</h2>
+      </div>
+      
+      <LogoutModal
+        show={show}
+        handleClose={handleClose}
+        LogoutClick={LogoutClick}
+      />
+    </div>
+  );
 };
 
 export default Logout;

@@ -13,8 +13,9 @@ import {
 } from "react-bootstrap";
 
 const Account = () => {
-  const [openAddModal, setOpenAddModal] = useState(false);
-
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   return (
     <div className="pages">
       <Card id="CardAccount">
