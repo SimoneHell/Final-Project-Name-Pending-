@@ -3,13 +3,16 @@
     max-width: 185px;
     height: 650px;
     margin: 10px;
+    border-radius: 25px;
   }
 
 .dayHeader {
-    background-color: brown;
+    background-color: #d66262;
     width: 185px;
     height: 75px;
     text-align: center;
+    border-top-left-radius: 25px;
+    border-top-right-radius: 25px;
 }
 
 .meal {
@@ -19,6 +22,9 @@
     text-align: center;
     margin-top: 25px;
     margin-left: 7.5px;
+    border-radius: 25px;
 }
 
-
+.mealpicked {
+    background: #6af5f5;
+}

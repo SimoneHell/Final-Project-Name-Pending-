@@ -1,0 +1,14 @@
+
+#CardAccount {
+    margin-right: auto;
+    margin-left: auto;
+    width: 50%;
+    box-shadow: 0 15px 25px rgba(0, 0, 0, 0.2);
+    border-width: thick;
+    border-color: rgba(71, 62, 62, 0.463);
+    height: 700px;
+    border-radius: 5px;
+    background-color: rgba(255, 253, 253, 0.504);
+    padding: 10px;
+    text-align: center;
+}
