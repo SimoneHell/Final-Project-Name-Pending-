@@ -1,3 +1,10 @@
+.searchInputs {
+  margin-top: 15px;
+  display: flex;
+  background-color: white;
+  height: 30px;
+  width: 600px;
+}
 
   .searchInput {
     background-color: white;
@@ -9,7 +16,7 @@
     font-size: 18px;
     padding: 0px;
     height: 30px;
-    width: 300px;
+    
   }
   
   .searchIcon {
@@ -17,13 +24,15 @@
     width: 50px;
     background-color: white;
     display: grid;
+    padding-top: 2.5px;
+    padding-left: 10px;
   }
 
   input:focus {
     outline: none;
   }
   .searchIcon svg {
-    font-size: 35px;
+    font-size: 25px;
   }
   
   .dataResult {
@@ -61,3 +70,4 @@
   #clearBtn {
     cursor: pointer;
   }
+  
