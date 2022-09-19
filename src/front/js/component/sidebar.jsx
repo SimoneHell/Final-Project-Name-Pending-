@@ -5,11 +5,11 @@ import {
   FaHeart,
   FaSearch,
   FaBars,
-  FaSignOutAlt,
 } from "react-icons/fa";
 import { NavLink } from "react-router-dom";
 import Logo from "../../img/rigo-baby.jpg";
 import { Logout } from "./logout";
+import { LogoutModal} from "./logout-modal.jsx";
 
 const Sidebar = ({ children }) => {
   const [isOpen, setIsOpen] = useState(false);
@@ -35,12 +35,14 @@ const Sidebar = ({ children }) => {
       path: "/favorites",
       name: "Favorites",
       icon: <FaHeart />,
+      
     },
 
     {
       path: "/logout",
       name: "Log Out",
-      icon: <FaSignOutAlt />,
+      icon: <LogoutModal/>,
+      
     },
   ];
   return (
@@ -64,9 +66,9 @@ const Sidebar = ({ children }) => {
               to={item.path}
               key={index}
               className="link"
-              activeclassname="mealpicked"
+              activeclassname="active"
             >
-              <div className="icon">{item.icon}</div>
+              <div>{item.icon}</div>
               <div
                 style={{ display: isOpen ? "block" : "none" }}
                 className="link_text"

@@ -3,16 +3,15 @@ import Button from 'react-bootstrap/Button';
 import Modal from 'react-bootstrap/Modal';
 import Form from 'react-bootstrap/Form';
 
-function AddModal() {
+export function AddModal() {
   const [show, setShow] = useState(false);
-
   const handleClose = () => setShow(false);
   const handleShow = () => setShow(true);
 
   return (
     <>
       <Button variant="primary" onClick={handleShow}>
-        Launch demo modal
+        Click Me
       </Button>
 
       <Modal show={show} onHide={handleClose}>
@@ -21,6 +20,7 @@ function AddModal() {
         </Modal.Header>
         <Modal.Body>
           <p>Day <Form.Select size="sm">
+        <option>Select Option</option>
         <option>Monday</option>
         <option>Tuesday</option>
         <option>Wednesday</option>
@@ -30,6 +30,7 @@ function AddModal() {
         <option>Sunday</option>
       </Form.Select></p>
           <p>Meal<Form.Select size="sm">
+        <option>Select Option</option>
         <option>Breakfast</option>
         <option>Lunch</option>
         <option>Dinner</option>
@@ -46,4 +47,3 @@ function AddModal() {
 }
 
 export default AddModal;
-

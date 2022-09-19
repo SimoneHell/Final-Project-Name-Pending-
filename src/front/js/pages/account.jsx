@@ -1,26 +1,31 @@
 import React, { useState } from "react";
-import Button from "react-bootstrap/Button";
-
-
 import AddModal from "../component/add-modal.jsx";
+import CurrentMealModal from "../component/currentmeal-modal.jsx";
+import MealCardModal from "../component/mealcard-modal.jsx";
+import AddSearchModal from "../component/add-searchbar-modal.jsx";
+
 
 const Account = () => {
-  const [openAddModal, setOpenAddModal] = useState(false);
-
+  const [show, setShow] = useState(false);
+  const handleClose = () => setShow(false);
+  const handleShow = () => setShow(true);
   return (
     <div>
       <div className="pages">
         <h2>Account</h2>
       </div>
-      <Button
-        variant="primary"
-        onClick={() => {
-          setOpenAddModal(true);
-        }}
-      >
-        Click me
-      </Button>{" "}
-      {openAddModal && <AddModal />}
+      <AddModal
+      show={show}
+      handleClose={handleClose} />
+      <CurrentMealModal
+      show={show}
+      handleClose={handleClose} />
+      <MealCardModal
+      show={show}
+      handleClose={handleClose} />
+      <AddSearchModal
+      show={show}
+      handleClose={handleClose} />
     </div>
   );
 };
