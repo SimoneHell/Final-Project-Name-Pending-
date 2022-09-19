@@ -15,16 +15,19 @@ api = Blueprint('api', __name__)
 
 @api.route('/user', methods=['GET'])
 def show_users():
-    users = User.query.all()
-    all_users_ll = []
-    for user in users:
-        all_users_ll.append({
-            'id':user.id,
-            'username':user.username,
-            'email':user.email,
-            'url': f'api/user/{user.id}'
-            })
-    return jsonify(all_users_ll), 200
+    try: 
+        users = User.query.all()
+        all_users_ll = []
+        for user in users:
+            all_users_ll.append({
+                'id':user.id,
+                'username':user.username,
+                'email':user.email,
+                'url': f'api/user/{user.id}'
+                })
+        return jsonify(all_users_ll), 200
+    except Exception as error:
+        return jsonify("Something wen't wrong, try again", print(error)), 400
 
 @api.route('/user/<user_id>', methods=['GET'])
 def get_user(user_id):
@@ -40,11 +43,19 @@ def get_user(user_id):
             })
         return jsonify(user_final), 200
     except Exception as error:
-        return jsonify("This user doesn't exists")
+        return jsonify("This user doesn't exists", print(error)), 400
 
 
         
-   
+DAYS_OF_THE_WEEK = {
+    'monday': 'Monday',
+    'tuesday': 'Tuesday',
+    'wednesday': 'Wednesday',
+    'thursday': 'Thursday',
+    'friday': 'Friday',
+    'saturday': 'Saturday',
+    'sunday': 'Sunday'
+}
 
 @api.route('/signup', methods=['POST'])
 def create_new_user():
@@ -54,6 +65,15 @@ def create_new_user():
     user = User.signup(password=user_password, email=user_email, username=user_username)
     db.session.add(user)
     db.session.commit()
+    for days in DAYS_OF_THE_WEEK:
+        daily_plan_name = days
+        first_block = []
+        second_block = []
+        third_block = []
+        user_id = user.id
+        daily_meal = Meal.create(name=daily_plan_name, first_block=first_block, second_block=second_block, third_block=third_block, user_id=user_id)
+        db.session.add(daily_meal)
+        db.session.commit()
 
     if user is not None:
         print(user)
@@ -90,7 +110,7 @@ def user_logout():
 def meal_list(): 
     meal = Meal.query.all()
     response_body_meal = list(map(lambda s: s.serialize(), meal))
-    return jsonify(response_body_meal), 200
+    return jsonify(response_body_meal, print(error)), 200
 
 @api.route('/meals/<meal_id>', methods=['GET'])
 def get_meal_by_id(meal_id):
@@ -106,7 +126,7 @@ def get_meal_by_id(meal_id):
             })
         return jsonify(meal_final), 200
     except Exception as error:
-        return jsonify("This meal doesn't exists")
+        return jsonify("This meal doesn't exists", print(error)), 400
     
 # --------------   User's Favorites --------------------------------
 @api.route('/user/<user_id>/favorites', methods=['GET'])
@@ -131,46 +151,16 @@ def get_user_favorites(user_id):
 
         return jsonify(user_final), 200
     except Exception as error:
-        return jsonify("This user doesn't have favorites")
+        return jsonify("This user doesn't have favorites", print(error)), 400
 
 # --------------   User's Daily plan --------------------------------
 @api.route('/user/<user_id>/daily_meals', methods=['GET'])
 def get_user_daily_plan(user_id):
-    user = User.query.filter_by(id=user_id).one_or_none()
-    return jsonify(user.to_dict()), 200
-'''  
     try:
-        user_final = ({
-            'id':user.id,
-            'username':user.username,
-            'daily_plans' : []
-            })
-
-        for plan in user.daily_plans:
-            meal_first= list(map(lambda s: s.serialize_daily_plan(), plan.first_block))
-            meal_second= list(map(lambda s: s.serialize_daily_plan(), plan.second_block))
-            meal_third= list(map(lambda s: s.serialize_daily_plan(), plan.third_block))
-
-            user_final['daily_plans'].append({
-                'daily_plan_id': plan.id,
-                'first_block' : { 
-                    'meals' : meal_first
-                },
-                'second_block' : { 
-                    'meals' : meal_second
-                },
-                'third_block' : { 
-                    'meals' : meal_third
-                }
-            })
-
-        return jsonify(user_final), 200
-
+        user = User.query.filter_by(id=user_id).one_or_none()
+        return jsonify(user.to_dict()), 200
     except Exception as error:
-        print('no')
-        return jsonify("This user doesn't have daily plans")
-        '''
-
+        return jsonify("This user doesn't have daily meals", print(error)), 400
 
 
 
