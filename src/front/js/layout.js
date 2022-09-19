@@ -25,19 +25,22 @@ const Layout = () => {
     <div>
       <BrowserRouter basename={basename}>
         <ScrollToTop>
+          <div>
           <Sidebar>
             <Routes>
               <Route path="/" element={<Dashboard/>} />
-              <Route path="/dashboard" element={<Dashboard />} />
-              <Route path="/account" element={<Account />} />
+              <Route path="/dashboard" element={<Dashboard/>} />
               <Route path="/recipesearch" element={<RecipeSearch />} />
               <Route path="/favorites" element={<Favorites />} />
-              <Route path="/logout" element={<Logout />} />
+              <Route path="/account" element={<Account/>} />
+              <Route element={<Logout />} path="/logout"  />
               <Route element={<Login />} path="/login" />
               <Route element={<ForgotPassword />} path="/forgotpassword" />
+              <Route element={<SignUp />} path="/signup" />
               <Route element={<h1>Not found!</h1>} />
             </Routes>
           </Sidebar>
+          </div>
         </ScrollToTop>
       </BrowserRouter>
     </div>

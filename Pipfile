@@ -20,6 +20,10 @@ flask-admin = "*"
 flask-jwt-extended = "*"
 colorama = "*"
 postgres = "*"
+marshmallow = "*"
+flask-marshmallow = "*"
+sqlalchemy-serializer = "*"
+sqlalchemy-utils = "*"
 
 [requires]
 python_version = "3.8"

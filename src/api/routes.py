@@ -13,24 +13,21 @@ from flask_jwt_extended import JWTManager
 api = Blueprint('api', __name__)
 
 
-@api.route('/hello', methods=['POST', 'GET'])
-def handle_hello():
-    response_body = "Hello, world!"
-    return jsonify(response_body), 200
-
-
 @api.route('/user', methods=['GET'])
 def show_users():
-    users = User.query.all()
-    all_users_ll = []
-    for user in users:
-        all_users_ll.append({
-            'id':user.id,
-            'username':user.username,
-            'email':user.email,
-            
-            })
-    return jsonify(all_users_ll), 200
+    try: 
+        users = User.query.all()
+        all_users_ll = []
+        for user in users:
+            all_users_ll.append({
+                'id':user.id,
+                'username':user.username,
+                'email':user.email,
+                'url': f'api/user/{user.id}'
+                })
+        return jsonify(all_users_ll), 200
+    except Exception as error:
+        return jsonify("Something wen't wrong, try again", print(error)), 400
 
 @api.route('/user/<user_id>', methods=['GET'])
 def get_user(user_id):
@@ -40,13 +37,25 @@ def get_user(user_id):
             'id':user.id,
             'username':user.username,
             'email':user.email,
+            'daily_plans': f'./api/user/{user.id}/daily_meals',
+            'favorites': f'./api/user/{user.id}/favorites'
             
             })
         return jsonify(user_final), 200
     except Exception as error:
-        return jsonify("Este usuario no existe")
+        return jsonify("This user doesn't exists", print(error)), 400
+
+
         
-   
+DAYS_OF_THE_WEEK = {
+    'monday': 'Monday',
+    'tuesday': 'Tuesday',
+    'wednesday': 'Wednesday',
+    'thursday': 'Thursday',
+    'friday': 'Friday',
+    'saturday': 'Saturday',
+    'sunday': 'Sunday'
+}
 
 @api.route('/signup', methods=['POST'])
 def create_new_user():
@@ -56,6 +65,15 @@ def create_new_user():
     user = User.signup(password=user_password, email=user_email, username=user_username)
     db.session.add(user)
     db.session.commit()
+    for days in DAYS_OF_THE_WEEK:
+        daily_plan_name = days
+        first_block = []
+        second_block = []
+        third_block = []
+        user_id = user.id
+        daily_meal = Meal.create(name=daily_plan_name, first_block=first_block, second_block=second_block, third_block=third_block, user_id=user_id)
+        db.session.add(daily_meal)
+        db.session.commit()
 
     if user is not None:
         print(user)
@@ -88,83 +106,63 @@ def user_logout():
 #-------------------------- MEALS -----------------------
 
 
-@api.route('/meal', methods=['GET'])
+@api.route('/meals', methods=['GET'])
 def meal_list(): 
     meal = Meal.query.all()
     response_body_meal = list(map(lambda s: s.serialize(), meal))
-    return jsonify(response_body_meal), 200
+    return jsonify(response_body_meal, print(error)), 200
 
-@api.route('/meal/<int:id>/information', methods=['GET'])
-def get_meal_by_id(id):
+@api.route('/meals/<meal_id>', methods=['GET'])
+def get_meal_by_id(meal_id):
+    meal = Meal.query.filter_by(id=meal_id).one_or_none()
+
+    try:
+        meal_final = ({
+            'id':meal.id,
+            'name':meal.name,
+            'sumarize':meal.sumarize,
+            'nutrients':meal.nutrients
+            
+            })
+        return jsonify(meal_final), 200
+    except Exception as error:
+        return jsonify("This meal doesn't exists", print(error)), 400
     
-    meal = Meal.get_meal_by_id(id)
+# --------------   User's Favorites --------------------------------
+@api.route('/user/<user_id>/favorites', methods=['GET'])
+def get_user_favorites(user_id):
+    user = User.query.filter_by(id=user_id).one_or_none()
     
-    return(jsonify(meal.serialize()))
+    try:
+        user_final = ({
+            'id':user.id,
+            'username':user.username,
+            'favorites' : []
+            })
+
+        for fav in user.favorites:
+            user_final['favorites'].append({
+                'id':fav.id,
+                'name':fav.name,
+                'sumarize':fav.sumarize,
+                'nutrients':fav.nutrients,
+                'ingredients':fav.ingredients,
+            })
+
+        return jsonify(user_final), 200
+    except Exception as error:
+        return jsonify("This user doesn't have favorites", print(error)), 400
+
+# --------------   User's Daily plan --------------------------------
+@api.route('/user/<user_id>/daily_meals', methods=['GET'])
+def get_user_daily_plan(user_id):
+    try:
+        user = User.query.filter_by(id=user_id).one_or_none()
+        return jsonify(user.to_dict()), 200
+    except Exception as error:
+        return jsonify("This user doesn't have daily meals", print(error)), 400
 
 
-#--------------------- FOOD-----------------
 
 
-@api.route('/food', methods=['GET'])
-def food_list(): 
-    food = Food.query.all()
-    response_body_food = list(map(lambda s: s.serialize(), food))
-    return jsonify(response_body_food), 200
 
-@api.route('/food/<int:id>/information', methods=['GET'])
-def get_food_by_id(id):
-    
-    food = Food.get_food_by_id(id)
-    
-    return(jsonify(food.serialize()))
-
-# ----------------  FAVORITES -------------
-
-@api.route('/user/favorites', methods=['GET'])
-def getUserFavorites():
-    favorites = Favorites.query.all()
-    response_body = list(map(lambda s: s.serialize(), favorites))
-    return jsonify(response_body)
-
-    # ---- Add Favorite Meal and Food -----
-
-@api.route('/user/favorites/meal/<int:meal_id>', methods=['POST'])
-def meals_fav():
-    meals_fav = Favorites()
-    meals_fav.user_id = request.json.get("user_id", None)
-    meals_fav.meal_id = request.json.get("meal_id", None)
-    db.session.add(meal_fav)
-    db.session.commit()
-    return jsonify["msg":"Everything went Ok"], 200
-
-
-@api.route('/user/favorites/food/<int:food_id>', methods=['POST'])
-def foods_fav():
-    foods_fav = Favorites()
-    foods_fav.user_id = request.json.get("user_id", None)
-    foods_fav.food_id = request.json.get("food_id", None)
-    db.session.add(food_fav)
-    db.session.commit()
-    return jsonify["msg":"Everything went Ok"], 200
-
-
-    # -------- Delete Favorite Meal and Food --------- 
-
-    
-@api.route('/user/favorites/meal/<int:meal_id>', methods=['DELETE'])
-def deletePlanetsFav(meal_id):
-    delete_fav_meal = Favorites.query.get("meal")
-    if delete_fav_meal is None: 
-        raise APIException('User was not found', status_code=404)
-    db.session.delete(delete_fav_meal)
-    db.session.commit()
-    return jsonify("Succesfully Deleted"), 200 
-
-@api.route('/user/favorites/food/<int:food_id>', methods=['DELETE'])
-def deleteFoodFav (food_id ):
-    delete_fav_food = Favorites.query.get("food")
-    if delete_fav_food is None: 
-        raise APIException('User was not found', status_code=404)
-    db.session.delete(delete_fav_food)
-    db.session.commit()
-    return jsonify("Succesfully Deleted"), 200 

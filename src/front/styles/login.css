@@ -1,6 +1,7 @@
 
   body {
-    background-repeat: no-repeat;
+    background: -webkit-linear-gradient(bottom, #f9b551,#FEF8BE );
+   
   }
   label {
     font-family: "Raleway", sans-serif;
@@ -42,7 +43,7 @@
   }
   #card-title {
     font-family:Georgia, 'Times New Roman', Times, serif ;
-    letter-spacing: 4px;
+    letter-spacing: 1px;
     padding-bottom: 23px;
     padding-top: 13px;
     text-align: center;

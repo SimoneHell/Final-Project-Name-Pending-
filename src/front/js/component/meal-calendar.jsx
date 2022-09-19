@@ -6,9 +6,11 @@ function DailyMeal () {
     const [isSelected, setIsSelected] = useState(false);
     const pickMeal = () => setIsSelected(!isSelected);
   
+    console.log(pickMeal)
     return(
         <div class="row-sm ms auto" className='meal' activeclassname="active" >
             <FaPlus onClick={pickMeal}/>
+            
             </div>
     )
 };
