@@ -86,7 +86,7 @@ TYPES = [
 class DailyPlan(db.Model, SerializerMixin):
     serialize_only = ('id', 'first_block.id', 'first_block.name', 'second_block.id', 'second_block.name', 'third_block.id', 'third_block.name')
     id = db.Column(db.Integer, unique=True, primary_key=True)
-    
+    name = db.Column(db.String(120), nullable=True)
     first_block = db.relationship(
         'Meal', secondary=first_block, backref='Breakfast')
     second_block = db.relationship(
@@ -132,6 +132,18 @@ class Meal(db.Model, SerializerMixin):
     def __repr__(self):
         return f'Meal( id : "{str(self.id)}",  name : "{str(self.name)}", sumarize : "{str(self.sumarize)}",  nutrients : "{str(self.nutrients)}",  ingredients : "{str(self.ingredients)}")'
 
+    @classmethod
+    def create(cls, name, first_block, second_block, third_block):
+        instance = cls(
+            name=name,
+            first_block=first_block,
+            second_block=second_block,
+            third_block=third_block
+        )
+        if isinstance(instance, cls):
+            return instance
+        else:
+            return None
     
         
 
