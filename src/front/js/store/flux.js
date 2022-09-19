@@ -52,6 +52,18 @@ const getState = ({ getStore, getActions, setStore }) => {
           });
       },
 
+      loadIndivMeal: (url, id, plans) => {
+        const store = getStore();
+
+        fetch(url)
+          .then((data) => data.json())
+          .then((data) => {
+            let newArray = store[plans];
+            newArray[id].info = data.result;
+            setStore({ [plans]: newArray });
+          });
+      },
+
       updateFavoriteList: (newElement) => {
         const store = getStore();
         const newFavorites = [...store.users.favorites, newElement];
@@ -66,18 +78,6 @@ const getState = ({ getStore, getActions, setStore }) => {
       },
     },
 
-    getMessage: async () => {
-      try {
-        // fetching data from the backend
-        const resp = await fetch(process.env.BACKEND_URL + "/api/hello");
-        const data = await resp.json();
-        setStore({ message: data.message });
-        // don't forget to return something, that is how the async resolves
-        return data;
-      } catch (error) {
-        console.log("Error loading message from backend", error);
-      }
-    },
   };
 };
 
