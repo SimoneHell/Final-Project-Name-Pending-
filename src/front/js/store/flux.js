@@ -1,5 +1,5 @@
 const API_URL =
-  "https://3001-nealxero-finalprojectna-fxjpcu5gpuq.ws-eu64.gitpod.io/";
+  "https://3001-simonehell-finalproject-49aiay3q1gu.ws-us67.gitpod.io/"
 
 const getState = ({ getStore, getActions, setStore }) => {
   return {
